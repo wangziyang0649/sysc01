@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sau.stedu.sysc01.mapper.CategoryMapper">
+
+    <select id="getCategoryInfos" resultMap="CategoryMap">
+        select g.*
+        from gameinfo g
+        where g.gameName like concat('%',#{value},'%')
+    </select>
+    <resultMap id="CategoryMap" type="sau.stedu.sysc01.model.Category">
+        <id column="gameid" property="gameid"></id>
+        <result column="gameName" property="gameName"></result>
+        <result column="beginTime " property="beginTime "></result>
+        <result column="endTime" property="endTime"></result>
+    </resultMap>
+
+    <select id="getCategoryInfoid" resultMap="CategoryMap2">
+        select g.*
+        from gameinfo g
+        where g.gameid=#{value}
+    </select>
+    <resultMap id="CategoryMap2" type="sau.stedu.sysc01.model.Category">
+        <id column="gameid" property="gameid"></id>
+        <result column="gameName" property="gameName"></result>
+        <result column="beginTime " property="beginTime "></result>
+        <result column="endTime" property="endTime"></result>
+    </resultMap>
+
+    <select id="find" resultMap="CategoryMap3">
+        select g.*
+        from gameinfo g
+    </select>
+    <resultMap id="CategoryMap3" type="sau.stedu.sysc01.model.Category">
+        <id column="gameid" property="gameid"></id>
+        <result column="gameName" property="gameName"></result>
+        <result column="beginTime " property="beginTime "></result>
+        <result column="endTime" property="endTime"></result>
+    </resultMap>
+
+    <select id="findme" resultMap="CategoryMap4">
+        SELECT *
+        FROM gameinfo g
+        <where>
+            g.gameid in(
+            SELECT gid
+            FROM gameinfo_role
+            where uid=#{value}
+            )
+        </where>
+    </select>
+    <resultMap id="CategoryMap4" type="sau.stedu.sysc01.model.Category">
+        <id column="gameid" property="gameid"></id>
+        <result column="gameName" property="gameName"></result>
+        <result column="beginTime " property="beginTime "></result>
+        <result column="endTime" property="endTime"></result>
+    </resultMap>
+
+    <select id="checkCateRepeat" resultType="int">
+        select count(*) as counts
+        from gameinfo
+        <where>
+            gameName = #{gameName}
+            <!--            <if test="parentId == null or parentId == -1">-->
+            <!--                and parentId is null-->
+            <!--            </if>-->
+        </where>
+    </select>
+
+    <insert id="addgame">
+        insert into gameinfo
+        values (default,#{gameName},#{beginTime},#{endTime})
+    </insert>
+</mapper>
